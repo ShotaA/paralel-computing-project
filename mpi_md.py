@@ -25,27 +25,38 @@ def return_2nd_nonblocking(source,dest,tag,items):
 
 class RandomForest:
 	def __init__(self,n_estims=10,f=50):
-	    self.estims=[DecisionTreeClassifier(random_state=0) for x in range(n_estims)]
+	    self.estim=DecisionTreeClassifier(random_state=0) 
 	    self.f=f
-	    self.feats=[]
+	    self.feat=[]
 
 	def fit(self, X,y):
-	    for mod in self.estims:
 		feat = np.random.choice(range(X.shape[1]), self.f, replace=False)
-		self.feats.append(feat)
+		#self.feats.append(feat)
+		self.feat=feat
 		ind = np.random.randint(0,len(y),len(y))
 		new_X=X.to_numpy()[ind]
 		new_X=new_X[:,feat]
 		new_y=y[ind]
-		mod.fit(new_X,new_y)
-		print(self.feats)
+		self.estim.fit(new_X,new_y)
 
 	def predict(self, X):
-	    preds=np.zeros((len(self.estims),X.shape[0]))
-	    for i in range(len(self.estims)):
-		preds[i]=self.estims[i].predict(X.to_numpy()[:,self.feats[i]])
-	    preds=preds.sum(axis=0)
-	    return (np.where(preds>0,1,-1))
+		
+		#preds=preds.sum(axis=0)
+		comm=MPI.COMM_WORLD
+		mpi_rank = comm.Get_rank()
+		size = comm.Get_size()
+		sendbuf=None
+
+
+		preds=np.zeros((size,X.shape[0]))
+		#for i in range(len(self.estims)):
+		#pred=self.estim.predict(X)
+		pred=self.estim.predict(X.to_numpy()[:,self.feat])
+		comm.Gather(pred,preds,root=0)
+		if mpi_rank==0:
+			preds=preds.sum(axis=0)
+			return (np.where(preds>0,1,-1))
+		return None
 	
 
    
@@ -81,6 +92,7 @@ data=pd.read_csv('blood.csv')
 X=data.iloc[:,:-1]
 y=data.iloc[:,-1]
 
+#Bagging
 
 comm=MPI.COMM_WORLD
 mpi_rank = comm.Get_rank()
@@ -96,13 +108,21 @@ model.predict(X)
 #error_rate_train = accuracy_score(model.predict(X),y)
 #print("Train error:",1-error_rate_train)
 
+#Random Forest
+
+comm=MPI.COMM_WORLD
+mpi_rank = comm.Get_rank()
+if mpi_rank==0:
+	start=time.time()
+model = RandomForest(n_estims=20,f=1)
+model.fit(X,y)
+if mpi_rank==0:
+	taken=time.time()-start
+	print(taken)
+
+model.predict(X)
 
 
 
-#model = RandomForest(n_estims=20,f=1)
-#model.fit(X,y)
-#error_rate_train = accuracy_score(model.predict(X),y)
-#error_rate_test =  accuracy_score(test.y, model.predict(test.drop('y',axis=1)))
-#print("Train error:",1-error_rate_train)
-#print("Test error:",1-error_rate_test)
+
 	
