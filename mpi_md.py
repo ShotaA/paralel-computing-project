@@ -22,7 +22,7 @@ def return_2nd_nonblocking(source,dest,tag,items):
 	else:
 		return None
 
-class SimplifiedRandomForest:
+class RandomForest:
 	def __init__(self,n_estims=10,f=50):
 	    self.estims=[DecisionTreeClassifier(random_state=0) for x in range(n_estims)]
 	    self.f=f
@@ -37,6 +37,7 @@ class SimplifiedRandomForest:
 		new_X=new_X[:,feat]
 		new_y=y[ind]
 		mod.fit(new_X,new_y)
+		print(self.feats)
 
 	def predict(self, X):
 	    preds=np.zeros((len(self.estims),X.shape[0]))
@@ -45,16 +46,46 @@ class SimplifiedRandomForest:
 	    preds=preds.sum(axis=0)
 	    return (np.where(preds>0,1,-1))
 	
+
+   
+class BagDT:
+
+	def __init__(self,n_estims=10):
+	    self.estims=[DecisionTreeClassifier(random_state=0) for x in range(n_estims)]
+
+	def fit(self, X,y):
+	    for mod in self.estims:
+		ind = np.random.randint(0,len(y),len(y))
+		new_X=X.to_numpy()[ind]
+		new_y=y[ind]
+		mod.fit(new_X,new_y)
+
+	def predict(self, X):
+	    preds=np.zeros((len(self.estims),X.shape[0]))
+	    for i in range(len(self.estims)):
+		preds[i]=self.estims[i].predict(X)
+	    preds=preds.sum(axis=0)
+	    return (np.where(preds>0,1,-1))
+
 ## LOAD DATA
 data=pd.read_csv('blood.csv')
 X=data.iloc[:,:-1]
 y=data.iloc[:,-1]
 
 
-model = SimplifiedRandomForest(n_estims=2,f=2)
+model = BagDT(n_estims=50)
 model.fit(X,y)
+
 error_rate_train = accuracy_score(model.predict(X),y)
-#error_rate_test =  accuracy_score(test.y, model.predict(test.drop('y',axis=1)))
 print("Train error:",1-error_rate_train)
+
+
+
+
+#model = RandomForest(n_estims=20,f=1)
+#model.fit(X,y)
+#error_rate_train = accuracy_score(model.predict(X),y)
+#error_rate_test =  accuracy_score(test.y, model.predict(test.drop('y',axis=1)))
+#print("Train error:",1-error_rate_train)
 #print("Test error:",1-error_rate_test)
 	
