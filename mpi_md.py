@@ -39,6 +39,7 @@ class RandomForest:
 		new_X=new_X[:,feat]
 		new_y=y[ind]
 		self.estim.fit(new_X,new_y)
+		comm.Gather(np.zeros((1)),np.zeros((1,size)),root=0)
 
 	def predict(self, X):
 		
@@ -70,6 +71,7 @@ class BagDT:
 		new_X=X.to_numpy()[ind]
 		new_y=y[ind]
 		self.estim.fit(new_X,new_y)
+		comm.Gather(np.zeros((1)),np.zeros((1,size)),root=0)
 
 	def predict(self, X):
 		comm=MPI.COMM_WORLD
