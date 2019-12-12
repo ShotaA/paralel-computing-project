@@ -89,13 +89,18 @@ class BagDT:
 
 
 ## LOAD DATA
-data=pd.read_csv('blood.csv')
+
+times=[]
+filename='blood.csv'
+
+data=pd.read_csv(filename)
 X=data.iloc[:,:-1]
 y=data.iloc[:,-1]
 f=int(math.log(X.shape[1]+1,2))
 #Bagging
 
 comm=MPI.COMM_WORLD
+size = comm.Get_size()
 mpi_rank = comm.Get_rank()
 if mpi_rank==0:
 	start=time.time()
@@ -103,12 +108,10 @@ model = BagDT()
 model.fit(X,y)
 if mpi_rank==0:
 	taken=time.time()-start
+	pd.DataFrame([[filename,taken,size]]).to_csv('bag_mpi.txt',mode='a',index=False,header=False)
 	print(taken)
 
 model.predict(X)
-#error_rate_train = accuracy_score(model.predict(X),y)
-#print("Train error:",1-error_rate_train)
-
 #Random Forest
 
 comm=MPI.COMM_WORLD
@@ -120,7 +123,7 @@ model.fit(X,y)
 if mpi_rank==0:
 	taken=time.time()-start
 	print(taken)
-
+	pd.DataFrame([[filename,taken,size]]).to_csv('rf_mpi.txt',mode='a',index=False,header=False)
 model.predict(X)
 
 
