@@ -91,7 +91,8 @@ class BagDT:
 ## LOAD DATA
 
 times=[]
-filename='blood.csv'
+#filename='blood.csv'
+filename='2dplanes.csv'
 
 data=pd.read_csv(filename)
 X=data.iloc[:,:-1]
