@@ -15,10 +15,10 @@ import time
 # In[23]:
 
 
-filename='blood.csv'
-#filename='2dplanes.csv'
+#filename='blood.csv'
+filename='2dplanes.csv'
 
-n=20
+n=100
 
 data=pd.read_csv(filename)
 X=data.iloc[:,:-1]
@@ -34,7 +34,7 @@ clf = RandomForestClassifier(n_estimators=n,random_state=0)
 clf.fit(X, y)
 taken=time.time()-start
 print(taken)
-
+pd.DataFrame([[filename,taken,n]]).to_csv('rf_sk.txt',mode='a',index=False,header=False)
 
 # In[25]:
 
@@ -44,6 +44,7 @@ clf = BaggingClassifier(n_estimators=n,random_state=0)
 clf.fit(X, y)
 taken=time.time()-start
 print(taken)
+pd.DataFrame([[filename,taken,n]]).to_csv('bag_sk.txt',mode='a',index=False,header=False)
 
 
 # In[ ]:
