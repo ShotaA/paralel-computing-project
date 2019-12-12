@@ -4,6 +4,7 @@ from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
 from sklearn.metrics import accuracy_score
 import time
+import math
 
 
 def return_2nd_nonblocking(source,dest,tag,items):
@@ -91,7 +92,7 @@ class BagDT:
 data=pd.read_csv('blood.csv')
 X=data.iloc[:,:-1]
 y=data.iloc[:,-1]
-
+f=int(math.log(X.shape[1]+1,2))
 #Bagging
 
 comm=MPI.COMM_WORLD
@@ -114,7 +115,7 @@ comm=MPI.COMM_WORLD
 mpi_rank = comm.Get_rank()
 if mpi_rank==0:
 	start=time.time()
-model = RandomForest(n_estims=20,f=1)
+model = RandomForest(f=f)
 model.fit(X,y)
 if mpi_rank==0:
 	taken=time.time()-start
