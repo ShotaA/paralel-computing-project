@@ -14,3 +14,9 @@ blood.csv,0.35385799407958984,100
 2dplanes.csv,2.6019930839538574,32
 2dplanes.csv,5.209871053695679,64
 2dplanes.csv,8.201679944992065,100
+custom_satisfaction.csv,4.211282014846802,1
+custom_satisfaction.csv,7.78592586517334,2
+custom_satisfaction.csv,14.959661960601807,4
+custom_satisfaction.csv,29.66061806678772,8
+custom_satisfaction.csv,57.958911180496216,16
+custom_satisfaction.csv,114.73621797561646,32
