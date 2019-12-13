@@ -47,9 +47,9 @@ parsedData = data.map(parsePoint)
 # In[12]:
 
 
-from pyspark.mllib.classification import SVMWithSGD, SVMModel
-model = SVMWithSGD.train(trainingData, iterations=100)
-evaluate(model,trainingData,testData)
+#from pyspark.mllib.classification import SVMWithSGD, SVMModel
+#model = SVMWithSGD.train(trainingData, iterations=100)
+#evaluate(model,trainingData,testData)
 
 
 # Gradient Boosted Trees
@@ -57,10 +57,10 @@ evaluate(model,trainingData,testData)
 # In[13]:
 
 
-from pyspark.mllib.tree import GradientBoostedTrees, GradientBoostedTreesModel
-model = GradientBoostedTrees.trainClassifier(parsedData,
-                                             categoricalFeaturesInfo={}, numIterations=3)
-evaluate(model,trainingData,testData)
+#from pyspark.mllib.tree import GradientBoostedTrees, GradientBoostedTreesModel
+#model = GradientBoostedTrees.trainClassifier(parsedData,
+#                                             categoricalFeaturesInfo={}, numIterations=3)
+#evaluate(model,trainingData,testData)
 
 
 # In[14]:

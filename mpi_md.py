@@ -94,9 +94,11 @@ class BagDT:
 
 times=[]
 #filename='blood.csv'
-filename='2dplanes.csv'
+#filename='2dplanes.csv'
+filename='custom_satisfaction.csv'
 
 data=pd.read_csv(filename)
+data=data.drop('ID',axis=1)
 X=data.iloc[:,:-1]
 y=data.iloc[:,-1]
 f=int(math.log(X.shape[1]+1,2))
