@@ -66,7 +66,6 @@ parsedData = data.map(parsePoint)
 
 # Random Forest
 
-<<<<<<< HEAD
 # from pyspark.mllib.tree import RandomForest, RandomForestModel
 # model = RandomForest.trainClassifier(trainingData, numClasses=2, categoricalFeaturesInfo={},
 #                                      numTrees=3, featureSubsetStrategy="auto",
@@ -76,6 +75,7 @@ parsedData = data.map(parsePoint)
 # In[16]:
 
 
+import pandas as pd
 from pyspark.mllib.tree import RandomForest, RandomForestModel
 for n in [1,2,4,8,16,32,64,100]:
     start=time.time()
@@ -85,11 +85,9 @@ for n in [1,2,4,8,16,32,64,100]:
     taken=time.time()-start
     taken
     pd.DataFrame([[filename,taken,n]]).to_csv('rf_spark.txt',mode='a',index=False,header=False)
-=======
 #from pyspark.mllib.classification import SVMWithSGD, SVMModel
 #model = SVMWithSGD.train(trainingData, iterations=100)
 #evaluate(model,trainingData,testData)
->>>>>>> 5d0356ada16b21acb718a3437da55805e6b554ef
 
 
 # Gradient Boosted Trees
@@ -99,8 +97,7 @@ for n in [1,2,4,8,16,32,64,100]:
 
 #from pyspark.mllib.tree import GradientBoostedTrees, GradientBoostedTreesModel
 #model = GradientBoostedTrees.trainClassifier(parsedData,
-<<<<<<< HEAD
-                                             categoricalFeaturesInfo={}, numIterations=3)
+                                             #categoricalFeaturesInfo={}, numIterations=3)
 #evaluate(model,trainingData,testData)
 
 
@@ -111,10 +108,8 @@ for n in [1,2,4,8,16,32,64,100]:
 
 
 # In[ ]:
-=======
 #                                             categoricalFeaturesInfo={}, numIterations=3)
 #evaluate(model,trainingData,testData)
->>>>>>> 5d0356ada16b21acb718a3437da55805e6b554ef
 
 
 
